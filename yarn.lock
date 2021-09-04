@@ -1081,10 +1081,10 @@
   resolved "https://registry.yarnpkg.com/@solidity-parser/parser/-/parser-0.11.1.tgz#fa840af64840c930f24a9c82c08d4a092a068add"
   integrity sha512-H8BSBoKE8EubJa0ONqecA2TviT3TnHeC4NpgnAHSUiuhZoQBfPB4L2P9bs8R6AoTW10Endvh3vc+fomVMIDIYQ==
 
-"@sushiswap/sdk@^5.0.0-canary.56":
-  version "5.0.0-canary.56"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.56.tgz#d79f87792e78d90ec4b107c8dc34d6d7a1a7b9f1"
-  integrity sha512-ooaX19iTSxw1y6z0F/jSAJD93zLS70JCVaLVs/3ggh047Qt6ddtBNh06IfKK6D/sTOD2cy3oO5mZWpXTwCrXaw==
+"@sushiswap/sdk@^5.0.0-canary.66":
+  version "5.0.0-canary.66"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.66.tgz#e80cfa1205e8f4d31953bbdcccf8b1eb1cfa9311"
+  integrity sha512-/d2NDtBIM7H1fsJnGmWDGmqY5gsGyJ+Pj3c7RJPl+hVsDEz0NYcWzr7Yy991nS+FU56ny4RgKIpmPdmkGdJHwg==
   dependencies:
     big.js "^6.1.0"
     decimal.js-light "^2.5.0"

@@ -1,11 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  ERC20Context,
-  UniswapV2Router02Context,
-  CurrentAddressContext,
-} from "../hardhat/SymfoniContext";
+import { ERC20Context, UniswapV2Router02Context, CurrentAddressContext } from "../hardhat/SymfoniContext";
 import { ERC20 } from "../hardhat/typechain/ERC20";
-import ethers from "ethers";
+import { ethers } from "ethers";
 interface Props {
   tokenA: string;
   tokenB: string;
@@ -29,15 +25,15 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB }) => {
 
   useEffect(() => {
     const fetchTokenSymbols = async () => {
-      if (!tokenAInstance || !tokenBInstance)  {
+      if (!tokenAInstance || !tokenBInstance) {
         return;
       }
-      
+
       setTokenASymbol(await tokenAInstance.symbol());
       setTokenBSymbol(await tokenBInstance.symbol());
     };
     fetchTokenSymbols();
-  }, [tokenAInstance, tokenBInstance])
+  }, [tokenAInstance, tokenBInstance]);
 
   const [amount, setAmount] = useState<number>(0);
 
@@ -57,10 +53,10 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB }) => {
 
       if (amount > 0) {
         // router gets angry if you pass in a 0
-        const amountsOut = await router.instance.getAmountsOut(
-          ethers.utils.parseEther(amount.toString()),
-          [tokenA, tokenB]
-        );
+        const amountsOut = await router.instance.getAmountsOut(ethers.utils.parseEther(amount.toString()), [
+          tokenA,
+          tokenB,
+        ]);
         setExchangeAmount(ethers.utils.formatUnits(amountsOut[1].toString(), 18));
       }
     };
@@ -77,12 +73,7 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB }) => {
     }
     const time = Math.floor(Date.now() / 1000) + 3600;
 
-    await (
-      await tokenAInstance.approve(
-        router.instance.address,
-        ethers.utils.parseEther(amount.toString())
-      )
-    ).wait();
+    await (await tokenAInstance.approve(router.instance.address, ethers.utils.parseEther(amount.toString()))).wait();
     await (
       await router.instance.swapExactTokensForTokens(
         ethers.utils.parseEther(amount.toString()),
