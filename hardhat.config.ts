@@ -28,6 +28,13 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 const config: HardhatUserConfig = {
   react: {
     providerPriority: ["web3modal", "hardhat"],
+    providerOptions: {
+      walletconnect: {
+        options: {
+          infuraId: "2aa2233e604343669669bca8df12bb04",
+        },
+      },
+    },
   },
   namedAccounts: {
     deployer: {
@@ -37,6 +44,7 @@ const config: HardhatUserConfig = {
       default: 1,
     },
   },
+  
   networks: {
     hardhat: {
       chainId: 1337,

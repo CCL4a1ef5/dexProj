@@ -6,6 +6,10 @@ import React, { useEffect, useState } from "react";
 import Web3Modal, { IProviderOptions } from "web3modal";
 import { UniswapV2ERC20 } from "./typechain/UniswapV2ERC20";
 import { UniswapV2ERC20__factory } from "./typechain/factories/UniswapV2ERC20__factory";
+import { MyToken2 } from "./typechain/MyToken2";
+import { MyToken2__factory } from "./typechain/factories/MyToken2__factory";
+import { MyToken1 } from "./typechain/MyToken1";
+import { MyToken1__factory } from "./typechain/factories/MyToken1__factory";
 import { UniswapV2Factory } from "./typechain/UniswapV2Factory";
 import { UniswapV2Factory__factory } from "./typechain/factories/UniswapV2Factory__factory";
 import { UniswapV2Pair } from "./typechain/UniswapV2Pair";
@@ -14,12 +18,9 @@ import { UniswapV2Router02 } from "./typechain/UniswapV2Router02";
 import { UniswapV2Router02__factory } from "./typechain/factories/UniswapV2Router02__factory";
 import { ERC20PresetMinterPauser } from "./typechain/ERC20PresetMinterPauser";
 import { ERC20PresetMinterPauser__factory } from "./typechain/factories/ERC20PresetMinterPauser__factory";
-import { MyToken2 } from "./typechain/MyToken2";
-import { MyToken2__factory } from "./typechain/factories/MyToken2__factory";
-import { MyToken1 } from "./typechain/MyToken1";
-import { MyToken1__factory } from "./typechain/factories/MyToken1__factory";
 import { ERC20 } from "./typechain/ERC20";
 import { ERC20__factory } from "./typechain/factories/ERC20__factory";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 const emptyContract = {
     instance: undefined,
@@ -40,12 +41,12 @@ const defaultSymfoniContext: SymfoniContextInterface = {
 };
 export const SymfoniContext = React.createContext<SymfoniContextInterface>(defaultSymfoniContext);
 export const UniswapV2ERC20Context = React.createContext<SymfoniUniswapV2ERC20>(emptyContract);
+export const MyToken2Context = React.createContext<SymfoniMyToken2>(emptyContract);
+export const MyToken1Context = React.createContext<SymfoniMyToken1>(emptyContract);
 export const UniswapV2FactoryContext = React.createContext<SymfoniUniswapV2Factory>(emptyContract);
 export const UniswapV2PairContext = React.createContext<SymfoniUniswapV2Pair>(emptyContract);
 export const UniswapV2Router02Context = React.createContext<SymfoniUniswapV2Router02>(emptyContract);
 export const ERC20PresetMinterPauserContext = React.createContext<SymfoniERC20PresetMinterPauser>(emptyContract);
-export const MyToken2Context = React.createContext<SymfoniMyToken2>(emptyContract);
-export const MyToken1Context = React.createContext<SymfoniMyToken1>(emptyContract);
 export const ERC20Context = React.createContext<SymfoniERC20>(emptyContract);
 
 export interface SymfoniContextInterface {
@@ -65,6 +66,16 @@ export interface SymfoniProps {
 export interface SymfoniUniswapV2ERC20 {
     instance?: UniswapV2ERC20;
     factory?: UniswapV2ERC20__factory;
+}
+
+export interface SymfoniMyToken2 {
+    instance?: MyToken2;
+    factory?: MyToken2__factory;
+}
+
+export interface SymfoniMyToken1 {
+    instance?: MyToken1;
+    factory?: MyToken1__factory;
 }
 
 export interface SymfoniUniswapV2Factory {
@@ -87,16 +98,6 @@ export interface SymfoniERC20PresetMinterPauser {
     factory?: ERC20PresetMinterPauser__factory;
 }
 
-export interface SymfoniMyToken2 {
-    instance?: MyToken2;
-    factory?: MyToken2__factory;
-}
-
-export interface SymfoniMyToken1 {
-    instance?: MyToken1;
-    factory?: MyToken1__factory;
-}
-
 export interface SymfoniERC20 {
     instance?: ERC20;
     factory?: ERC20__factory;
@@ -117,12 +118,12 @@ export const Symfoni: React.FC<SymfoniProps> = ({
     const [fallbackProvider] = useState<string | undefined>(undefined);
     const [providerPriority, setProviderPriority] = useState<string[]>(["web3modal", "hardhat"]);
     const [UniswapV2ERC20, setUniswapV2ERC20] = useState<SymfoniUniswapV2ERC20>(emptyContract);
+    const [MyToken2, setMyToken2] = useState<SymfoniMyToken2>(emptyContract);
+    const [MyToken1, setMyToken1] = useState<SymfoniMyToken1>(emptyContract);
     const [UniswapV2Factory, setUniswapV2Factory] = useState<SymfoniUniswapV2Factory>(emptyContract);
     const [UniswapV2Pair, setUniswapV2Pair] = useState<SymfoniUniswapV2Pair>(emptyContract);
     const [UniswapV2Router02, setUniswapV2Router02] = useState<SymfoniUniswapV2Router02>(emptyContract);
     const [ERC20PresetMinterPauser, setERC20PresetMinterPauser] = useState<SymfoniERC20PresetMinterPauser>(emptyContract);
-    const [MyToken2, setMyToken2] = useState<SymfoniMyToken2>(emptyContract);
-    const [MyToken1, setMyToken1] = useState<SymfoniMyToken1>(emptyContract);
     const [ERC20, setERC20] = useState<SymfoniERC20>(emptyContract);
     useEffect(() => {
         if (messages.length > 0)
@@ -185,7 +186,12 @@ export const Symfoni: React.FC<SymfoniProps> = ({
     };
     const getWeb3ModalProvider = async (): Promise<any> => {
         const providerOptions: IProviderOptions = {
-
+            walletconnect: {
+                package: WalletConnectProvider,
+                options: {
+                    infuraId: "2aa2233e604343669669bca8df12bb04"
+                }
+            }
         };
         const web3Modal = new Web3Modal({
             // network: "mainnet",
@@ -204,12 +210,12 @@ export const Symfoni: React.FC<SymfoniProps> = ({
             }
             const finishWithContracts = (text: string) => {
                 setUniswapV2ERC20(getUniswapV2ERC20(_provider, _signer))
+                setMyToken2(getMyToken2(_provider, _signer))
+                setMyToken1(getMyToken1(_provider, _signer))
                 setUniswapV2Factory(getUniswapV2Factory(_provider, _signer))
                 setUniswapV2Pair(getUniswapV2Pair(_provider, _signer))
                 setUniswapV2Router02(getUniswapV2Router02(_provider, _signer))
                 setERC20PresetMinterPauser(getERC20PresetMinterPauser(_provider, _signer))
-                setMyToken2(getMyToken2(_provider, _signer))
-                setMyToken1(getMyToken1(_provider, _signer))
                 setERC20(getERC20(_provider, _signer))
                 finish(text)
             }
@@ -248,9 +254,31 @@ export const Symfoni: React.FC<SymfoniProps> = ({
         return contract
     }
         ;
+    const getMyToken2 = (_provider: providers.Provider, _signer?: Signer) => {
+
+        const contractAddress = "0xf856429530841BbC548d3B5D8286fb37FaD4C82F"
+        const instance = _signer ? MyToken2__factory.connect(contractAddress, _signer) : MyToken2__factory.connect(contractAddress, _provider)
+        const contract: SymfoniMyToken2 = {
+            instance: instance,
+            factory: _signer ? new MyToken2__factory(_signer) : undefined,
+        }
+        return contract
+    }
+        ;
+    const getMyToken1 = (_provider: providers.Provider, _signer?: Signer) => {
+
+        const contractAddress = "0x7315B96d22C79A063956679B8C626dC010ce4B69"
+        const instance = _signer ? MyToken1__factory.connect(contractAddress, _signer) : MyToken1__factory.connect(contractAddress, _provider)
+        const contract: SymfoniMyToken1 = {
+            instance: instance,
+            factory: _signer ? new MyToken1__factory(_signer) : undefined,
+        }
+        return contract
+    }
+        ;
     const getUniswapV2Factory = (_provider: providers.Provider, _signer?: Signer) => {
 
-        const contractAddress = "0xAcBd7374483643cf884d2ea11Ca302B737C8E15b"
+        const contractAddress = "0xF6EeEAe69A3F8Ad8cEaB75Ff5e299754D6f327dF"
         const instance = _signer ? UniswapV2Factory__factory.connect(contractAddress, _signer) : UniswapV2Factory__factory.connect(contractAddress, _provider)
         const contract: SymfoniUniswapV2Factory = {
             instance: instance,
@@ -270,7 +298,7 @@ export const Symfoni: React.FC<SymfoniProps> = ({
         ;
     const getUniswapV2Router02 = (_provider: providers.Provider, _signer?: Signer) => {
 
-        const contractAddress = "0xD23a905cF74c5b3bb3F6dcd3eC8fddd7C9763293"
+        const contractAddress = "0x4Bde71f657436a3bc01280847507d3004790C6c7"
         const instance = _signer ? UniswapV2Router02__factory.connect(contractAddress, _signer) : UniswapV2Router02__factory.connect(contractAddress, _provider)
         const contract: SymfoniUniswapV2Router02 = {
             instance: instance,
@@ -284,28 +312,6 @@ export const Symfoni: React.FC<SymfoniProps> = ({
         const contract: SymfoniERC20PresetMinterPauser = {
             instance: instance,
             factory: _signer ? new ERC20PresetMinterPauser__factory(_signer) : undefined,
-        }
-        return contract
-    }
-        ;
-    const getMyToken2 = (_provider: providers.Provider, _signer?: Signer) => {
-
-        const contractAddress = "0x29C53bB84BC3a519632Fa3566a4aC1c9862E4565"
-        const instance = _signer ? MyToken2__factory.connect(contractAddress, _signer) : MyToken2__factory.connect(contractAddress, _provider)
-        const contract: SymfoniMyToken2 = {
-            instance: instance,
-            factory: _signer ? new MyToken2__factory(_signer) : undefined,
-        }
-        return contract
-    }
-        ;
-    const getMyToken1 = (_provider: providers.Provider, _signer?: Signer) => {
-
-        const contractAddress = "0x4Ae58181c6380FEd3b9C32Ef8f9A015599813246"
-        const instance = _signer ? MyToken1__factory.connect(contractAddress, _signer) : MyToken1__factory.connect(contractAddress, _provider)
-        const contract: SymfoniMyToken1 = {
-            instance: instance,
-            factory: _signer ? new MyToken1__factory(_signer) : undefined,
         }
         return contract
     }
@@ -334,12 +340,12 @@ export const Symfoni: React.FC<SymfoniProps> = ({
                 <SignerContext.Provider value={[signer, setSigner]}>
                     <CurrentAddressContext.Provider value={[currentAddress, setCurrentAddress]}>
                         <UniswapV2ERC20Context.Provider value={UniswapV2ERC20}>
-                            <UniswapV2FactoryContext.Provider value={UniswapV2Factory}>
-                                <UniswapV2PairContext.Provider value={UniswapV2Pair}>
-                                    <UniswapV2Router02Context.Provider value={UniswapV2Router02}>
-                                        <ERC20PresetMinterPauserContext.Provider value={ERC20PresetMinterPauser}>
-                                            <MyToken2Context.Provider value={MyToken2}>
-                                                <MyToken1Context.Provider value={MyToken1}>
+                            <MyToken2Context.Provider value={MyToken2}>
+                                <MyToken1Context.Provider value={MyToken1}>
+                                    <UniswapV2FactoryContext.Provider value={UniswapV2Factory}>
+                                        <UniswapV2PairContext.Provider value={UniswapV2Pair}>
+                                            <UniswapV2Router02Context.Provider value={UniswapV2Router02}>
+                                                <ERC20PresetMinterPauserContext.Provider value={ERC20PresetMinterPauser}>
                                                     <ERC20Context.Provider value={ERC20}>
                                                         {showLoading && loading ?
                                                             props.loadingComponent
@@ -352,12 +358,12 @@ export const Symfoni: React.FC<SymfoniProps> = ({
                                                             : props.children
                                                         }
                                                     </ERC20Context.Provider >
-                                                </MyToken1Context.Provider >
-                                            </MyToken2Context.Provider >
-                                        </ERC20PresetMinterPauserContext.Provider >
-                                    </UniswapV2Router02Context.Provider >
-                                </UniswapV2PairContext.Provider >
-                            </UniswapV2FactoryContext.Provider >
+                                                </ERC20PresetMinterPauserContext.Provider >
+                                            </UniswapV2Router02Context.Provider >
+                                        </UniswapV2PairContext.Provider >
+                                    </UniswapV2FactoryContext.Provider >
+                                </MyToken1Context.Provider >
+                            </MyToken2Context.Provider >
                         </UniswapV2ERC20Context.Provider >
                     </CurrentAddressContext.Provider>
                 </SignerContext.Provider>
