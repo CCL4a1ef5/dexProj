@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   ERC20Context,
   UniswapV2Router02Context,
