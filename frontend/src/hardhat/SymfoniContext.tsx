@@ -182,7 +182,7 @@ export const Symfoni: React.FC<SymfoniProps> = ({ showLoading = true, autoInit =
   };
   const getSigner = async (_provider: providers.Provider, hardhatProviderName: string): Promise<Signer | undefined> => {
     switch (hardhatProviderName) {
-      case "web3modal":
+      case "web3modal": 
         const web3provider = _provider as ethers.providers.Web3Provider;
         return await web3provider.getSigner();
       case "hardhat":
