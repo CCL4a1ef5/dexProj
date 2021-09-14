@@ -43,7 +43,7 @@ export const NewPool = () => {
       return;
     }
     const getPair = await factory.instance.getPair(tokenAaddress, tokenBaddress);
-    if (getPair == "0x0000000000000000000000000000000000000000") {
+    if (getPair === "0x0000000000000000000000000000000000000000") {
       return alert("Pair is non-existent, please create a pair");
     } else {
       alert("Crypto ccy pair exists");
@@ -56,7 +56,7 @@ export const NewPool = () => {
       return;
     }
     const getPair = await factory.instance.getPair(tokenAaddress, tokenBaddress);
-    if (getPair == "0x0000000000000000000000000000000000000000") {
+    if (getPair === "0x0000000000000000000000000000000000000000") {
       return alert("Crypto ccy pair exists, please approve / add liquidity if you would like to");
     } else {
       await factory.instance.createPair(tokenAaddress, tokenBaddress);
@@ -84,7 +84,7 @@ export const NewPool = () => {
       return;
     }
     const getPair = await factory.instance.getPair(tokenAaddress, tokenBaddress);
-    if (getPair == "0x0000000000000000000000000000000000000000") {
+    if (getPair === "0x0000000000000000000000000000000000000000") {
       alert("pair does not exists, please create a pair");
       return;
     }
