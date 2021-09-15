@@ -148,31 +148,31 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB, uniswapPair }) => {
   };
 
   return (
-    <div className="bg-gray-300 shadow sm:rounded-lg">
+    <div className="bg-#4b4b4b shadow sm:rounded-lg">
       <div className="px-4 py-5">
         <div className="grid grid-cols-10 gap-0">
-          <div className="col-span-1">
-            <p>Pair</p>
-            <p className="text-gray-800 text-lg">
+          <div>
+            <p className="text-gray-100">Pair</p>
+            <p className="text-yellow-600 text-lg">
               {tokenASymbol} / {tokenBSymbol}
             </p>
           </div>
 
           <div className="">
-            <p>Flash Quote</p>
-            <p>{flashQuote}</p>
+            <p className="text-gray-100">Flash Quote</p>
+            <p className="bg-gray-400 rounded-md mx-2">{flashQuote}</p>
           </div>
           <div className="col-span-1">
-            <p>{tokenASymbol} reserve</p>
-            <p>{tokenAreserves}</p>
+            <p className="text-gray-100">{tokenASymbol} reserve</p>
+            <p className="bg-gray-400 rounded-md mx-2">{tokenAreserves}</p>
           </div>
           <div className="col-span-1">
-            <p>{tokenBSymbol} reserve</p>
-            <p>{tokenBreserves}</p>
+            <p className="text-gray-100">{tokenBSymbol} reserve</p>
+            <p className="bg-gray-400 rounded-md mx-2">{tokenBreserves}</p>
           </div>
           <div className="col-span-2">
-            <p className="text-gray-800 text-lg">Base Crypto ({tokenASymbol})</p>
-            <span className="text-gray-800">Amount:</span>
+            <p className="text-gray-300 text-lg ">Base Crypto ({tokenASymbol})</p>
+            <span className="text-gray-100">Amount:</span>
             <input
               className="mx-2 flex-item shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md text-gray-800 w-5/12 text-lg text-center"
               type="text"
@@ -191,8 +191,8 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB, uniswapPair }) => {
             </button>
           </div>
           <div className="col-span-2">
-            <p className="text-gray-800 text-lg">Quote Crypto ({tokenBSymbol})</p>
-            <span className="text-gray-800">Receive:</span>
+            <p className="text-gray-400 text-lg">Quote Crypto ({tokenBSymbol})</p>
+            <span className="text-gray-400">Receive:</span>
             <input
               type="text"
               name="Receive"

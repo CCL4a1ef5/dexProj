@@ -38,10 +38,11 @@ function App() {
         <div className="min-h-screen bg-#3f3f3f font-sans border-box">
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
             <div className="text-gray-100 text-6xl pt-28 pb-10 border-1px">
-              <span className="text-red-400">defi</span>
+              <span className="text-yellow-400">defi</span>
               <span className="text-gray-900">n</span>
-              <span className="text-red-400">ance </span> <span className="text-gray-900"> : Swappity Swap</span>
+              <span className="text-yellow-400">ance </span> <span className="text-gray-900"> : Swappity Swap</span>
             </div>
+            <NewPool />
             {DUMMY_addressbook.map((getTokenAddresses) => (
               <Swap
                 tokenA={getTokenAddresses.tokenAad}
@@ -49,8 +50,6 @@ function App() {
                 uniswapPair={getTokenAddresses.uniPair}
               />
             ))}
-
-            <NewPool />
           </div>
         </div>
       </Symfoni>

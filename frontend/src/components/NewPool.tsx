@@ -123,7 +123,7 @@ export const NewPool = () => {
 
   return (
     <div>
-      <div className="bg-gray-500 p-6 shadow sm:rounded-lg">
+      <div className="bg-#ff9117 p-6 shadow sm:rounded-lg">
         <div className="w-full">
           <div className="p-1">
             <label className="p-2">tokenA address :</label>
