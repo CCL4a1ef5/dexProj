@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   ERC20Context,
   UniswapV2Router02Context,
@@ -19,6 +19,9 @@ export const NewPool = () => {
   const [tokenAInstance, setTokenAInstance] = useState<ERC20>();
   const [tokenBInstance, setTokenBInstance] = useState<ERC20>();
 
+  const [tokenASymbol, setTokenASymbol] = useState<string>();
+  const [tokenBSymbol, setTokenBSymbol] = useState<string>();
+
   const [amtTokenA, setAmtTokenA] = useState<number>(0);
   const [amtTokenB, setAmtTokenB] = useState<number>(0);
 
@@ -36,8 +39,15 @@ export const NewPool = () => {
   const amtBChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAmtTokenB(parseInt(event.target.value));
   };
+  function setBothTokenInstances() {
+    if (ERC20Factory.instance) {
+      setTokenAInstance(ERC20Factory.instance!.attach(tokenAaddress));
+      setTokenBInstance(ERC20Factory.instance!.attach(tokenBaddress));
+    }
+  }
 
   const checkPair = async () => {
+    setBothTokenInstances();
     if (!factory.instance) {
       console.log("factory instance not found");
       return;
@@ -51,12 +61,14 @@ export const NewPool = () => {
   };
 
   const createPair = async () => {
+    setBothTokenInstances();
     if (!factory.instance) {
       console.log("factory instance not found");
       return;
     }
     const getPair = await factory.instance.getPair(tokenAaddress, tokenBaddress);
-    if (getPair === "0x0000000000000000000000000000000000000000") {
+    console.log(getPair);
+    if (getPair !== "0x0000000000000000000000000000000000000000") {
       return alert("Crypto ccy pair exists, please approve / add liquidity if you would like to");
     } else {
       await factory.instance.createPair(tokenAaddress, tokenBaddress);
@@ -64,11 +76,6 @@ export const NewPool = () => {
   };
 
   const approve = async () => {
-    await setTokenAInstance(ERC20Factory.instance!.attach(tokenAaddress));
-    console.log(tokenAInstance);
-    await setTokenBInstance(ERC20Factory.instance!.attach(tokenBaddress));
-    console.log(tokenBInstance);
-
     if (!router.instance || !tokenAInstance || !tokenBInstance) {
       console.log("router instance not found");
       return;
@@ -102,22 +109,39 @@ export const NewPool = () => {
     );
   };
 
+  useEffect(() => {
+    const fetchTokenSymbols = async () => {
+      if (!tokenAInstance || !tokenBInstance) {
+        return;
+      }
+      console.log(tokenAInstance);
+      setTokenASymbol(await tokenAInstance.symbol());
+      setTokenBSymbol(await tokenBInstance.symbol());
+    };
+    fetchTokenSymbols();
+  });
+
   return (
     <div>
       <div className="bg-gray-500 p-6 shadow sm:rounded-lg">
         <div className="w-full">
           <div className="p-1">
-            <label className="p-2">tokenA address : </label>
+            <label className="p-2">tokenA address :</label>
             <input className="w-96 rounded" type="text" onChange={addressAChangeHandler} />
-            <label className="p-2">tokenA amount : </label>
+            <label className="p-2">tokenA amount :</label>
             <input className="w-28 rounded" type="number" min="0.01" step="0.01" onChange={amtAChangeHandler} />
+            <label className="p-2">tokenA symbol :</label>
+            <input className="w-28 rounded" disabled type="text" value={tokenASymbol} />
           </div>
           <div className="p-3">
-            <label className="p-2">tokenB address : </label>
+            <label className="p-2">tokenB address :</label>
             <input className="w-96 rounded" type="text" onChange={addressBChangeHandler} />
-            <label className="p-2">tokenB amount : </label>
+            <label className="p-2">tokenB amount :</label>
             <input className="w-28 rounded" type="number" min="0.01" step="0.01" onChange={amtBChangeHandler} />
+            <label className="p-2">tokenB symbol :</label>
+            <input className="w-28 rounded" disabled type="text" value={tokenBSymbol} />
           </div>
+          <div></div>
         </div>
         <button
           type="submit"
