@@ -72,7 +72,7 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB, uniswapPair }) => {
       }
     };
     fetchReserves();
-  }, [baseCrypto, quoteCrypto]);
+  }, [baseCrypto, quoteCrypto, tokenA, tokenB, uniPairInstance]);
 
   const [amount, setAmount] = useState<number>(0);
 
