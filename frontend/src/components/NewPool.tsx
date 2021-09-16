@@ -8,7 +8,14 @@ import {
 import { ERC20 } from "../hardhat/typechain/ERC20";
 import { ethers } from "ethers";
 
-export const NewPool = () => {
+export const NewPool = (props: {
+  onSaveV2PairAddr: (enteredV2PairAddr: {
+    id: string;
+    tokenAadd: string;
+    tokenBadd: string;
+    uniPairAdd: string;
+  }) => void;
+}) => {
   const ERC20Factory = useContext(ERC20Context);
   const router = useContext(UniswapV2Router02Context);
   const factory = useContext(UniswapV2FactoryContext);
@@ -74,6 +81,8 @@ export const NewPool = () => {
     } else {
       await factory.instance.createPair(tokenAaddress, tokenBaddress);
     }
+
+    saveUniPairAddr();
   };
 
   const approveRouter = async () => {
@@ -120,6 +129,29 @@ export const NewPool = () => {
     };
     fetchTokenSymbols();
   });
+
+  const saveUniPairAddr = async () => {
+    setBothTokenInstances();
+    if (!factory.instance) {
+      console.log("factory instance not found");
+      return;
+    }
+    const getPair = await factory.instance.getPair(tokenAaddress, tokenBaddress);
+    if (getPair === "0x0000000000000000000000000000000000000000") {
+      alert("Pair is non-existent, please create a pair");
+      return false;
+    } else {
+      const pairAddresses = {
+        id: Math.random().toString(),
+        tokenAadd: tokenAaddress,
+        tokenBadd: tokenBaddress,
+        uniPairAdd: getPair,
+      };
+      console.log(pairAddresses);
+      props.onSaveV2PairAddr(pairAddresses);
+      alert("Crypto ccy pair exists");
+    }
+  };
 
   return (
     <div>
@@ -170,6 +202,13 @@ export const NewPool = () => {
           onClick={addLiquidity}
         >
           Add Liquidity
+        </button>
+        <button
+          className="mt-3 inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-gray-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          type="submit"
+          onClick={saveUniPairAddr}
+        >
+          Add Pair to List
         </button>
       </div>
     </div>

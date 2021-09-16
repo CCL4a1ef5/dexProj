@@ -11,12 +11,12 @@ import { ethers } from "ethers";
 interface Props {
   tokenA: string;
   tokenB: string;
-  uniswapPair: string;
+  v2PairAddr: string;
 }
 
-export const Swap: React.FC<Props> = ({ tokenA, tokenB, uniswapPair }) => {
+export const Swap: React.FC<Props> = ({ tokenA, tokenB, v2PairAddr }) => {
   const ERC20Factory = useContext(ERC20Context);
-  const uniPairFactory = useContext(UniswapV2PairContext);
+  const v2PairFactory = useContext(UniswapV2PairContext);
   const router = useContext(UniswapV2Router02Context);
   const [currentAddress] = useContext(CurrentAddressContext);
 
@@ -25,7 +25,7 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB, uniswapPair }) => {
 
   const [tokenAInstance, setTokenAInstance] = useState<ERC20>();
   const [tokenBInstance, setTokenBInstance] = useState<ERC20>();
-  const [uniPairInstance, setUniPairInstance] = useState<UniswapV2Pair>();
+  const [v2PairInstance, setV2PairInstance] = useState<UniswapV2Pair>();
 
   const [tokenASymbol, setTokenASymbol] = useState<string>();
   const [tokenBSymbol, setTokenBSymbol] = useState<string>();
@@ -45,10 +45,10 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB, uniswapPair }) => {
   }, [ERC20Factory.instance, baseCrypto, quoteCrypto]);
 
   useEffect(() => {
-    if (uniPairFactory.instance) {
-      setUniPairInstance(uniPairFactory.instance!.attach(uniswapPair));
+    if (v2PairFactory.instance) {
+      setV2PairInstance(v2PairFactory.instance!.attach(v2PairAddr));
     }
-  }, [uniPairFactory.instance, uniswapPair]);
+  }, [v2PairFactory.instance, v2PairAddr]);
 
   useEffect(() => {
     const fetchTokenSymbols = async () => {
@@ -75,21 +75,21 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB, uniswapPair }) => {
 
   useEffect(() => {
     const fetchReserves = async () => {
-      if (!uniPairInstance) {
+      if (!v2PairInstance) {
         console.log("uniPair instance not found");
         return;
       }
       if (baseCrypto === tokenA) {
         //_reserves0 refers to tokenA of the getReserves object, likewise _reserves1 refers to tokenB
-        setTokenAreserves(parseInt(ethers.utils.formatEther((await uniPairInstance.getReserves())._reserve0)));
-        setTokenBreserves(parseInt(ethers.utils.formatEther((await uniPairInstance.getReserves())._reserve1)));
+        setTokenAreserves(parseInt(ethers.utils.formatEther((await v2PairInstance.getReserves())._reserve0)));
+        setTokenBreserves(parseInt(ethers.utils.formatEther((await v2PairInstance.getReserves())._reserve1)));
       } else if (baseCrypto === tokenB) {
-        setTokenBreserves(parseInt(ethers.utils.formatEther((await uniPairInstance.getReserves())._reserve0)));
-        setTokenAreserves(parseInt(ethers.utils.formatEther((await uniPairInstance.getReserves())._reserve1)));
+        setTokenBreserves(parseInt(ethers.utils.formatEther((await v2PairInstance.getReserves())._reserve0)));
+        setTokenAreserves(parseInt(ethers.utils.formatEther((await v2PairInstance.getReserves())._reserve1)));
       }
     };
     fetchReserves();
-  }, [baseCrypto, quoteCrypto, tokenA, tokenB, uniPairInstance]);
+  }, [baseCrypto, quoteCrypto, tokenA, tokenB, v2PairInstance]);
 
   useEffect(() => {
     const fetchExchangeAmount = async () => {

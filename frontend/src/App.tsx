@@ -4,7 +4,7 @@ import { Symfoni } from "./hardhat/SymfoniContext";
 import { Swap } from "./components/Swap";
 import { NewPool } from "./components/NewPool";
 
-const DUMMY_addressBook = [
+const STATIC_addressBook = [
   {
     id: "0",
     tokenAadd: "0x4Ae58181c6380FEd3b9C32Ef8f9A015599813246",
@@ -35,9 +35,28 @@ const DUMMY_addressBook = [
     tokenBadd: "0xE85ED95a8EFc3604344524b9cFccC1dd5F92993a",
     uniPairAdd: "0xA760e3be3bB18422cBcb445317724511D06A8941",
   },
+  {
+    id: "5",
+    tokenAadd: "0x0995153BBA0d10Af7E05f62A1CF45DCf1ddA3Ee8",
+    tokenBadd: "0x1ce8ac918e6d2109b7bb5e558868d1ae1f69a8e8",
+    uniPairAdd: "0xf59aBd1e4b6E2729Fa2148323CF3921634dBfaf1",
+  },
 ];
 
 function App() {
+  const [addressBook, setAddressBook] = useState(STATIC_addressBook);
+
+  const saveV2PairAddr = (enteredV2PairAddr: {
+    id: string;
+    tokenAadd: string;
+    tokenBadd: string;
+    uniPairAdd: string;
+  }) => {
+    console.log(enteredV2PairAddr);
+    setAddressBook(addressBook.concat(enteredV2PairAddr));
+    console.log(addressBook);
+  };
+
   return (
     <div className="App">
       <Symfoni autoInit={true}>
@@ -48,12 +67,12 @@ function App() {
               <span className="text-gray-900">n</span>
               <span className="text-yellow-400">ance </span> <span className="text-gray-900"> : Swappity Swap</span>
             </div>
-            <NewPool />
-            {DUMMY_addressBook.map((getAddresses) => (
+            <NewPool onSaveV2PairAddr={saveV2PairAddr} />
+            {addressBook.map((getAddresses) => (
               <Swap
                 tokenA={getAddresses.tokenAadd}
                 tokenB={getAddresses.tokenBadd}
-                uniswapPair={getAddresses.uniPairAdd}
+                v2PairAddr={getAddresses.uniPairAdd}
               />
             ))}
           </div>

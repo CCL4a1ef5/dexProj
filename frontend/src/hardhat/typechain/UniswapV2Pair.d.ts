@@ -199,6 +199,7 @@ interface UniswapV2PairInterface extends ethers.utils.Interface {
 }
 
 export class UniswapV2Pair extends Contract {
+  static instance: any;
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
