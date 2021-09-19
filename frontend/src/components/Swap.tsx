@@ -110,7 +110,7 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB, v2PairAddr }) => {
   }, [router.instance, amount, baseCrypto, quoteCrypto]);
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(parseInt(event.target.value));
+    setAmount(parseFloat(event.target.value));
   };
 
   const handleSwap = async () => {
