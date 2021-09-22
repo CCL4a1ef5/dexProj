@@ -67,8 +67,12 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB, v2PairAddr }) => {
         console.log("router instance not found");
         return;
       }
-      const quote = await router.instance.getAmountsOut(ethers.utils.parseEther("1"), [baseCrypto, quoteCrypto]);
-      setFlashQuote(ethers.utils.formatUnits(quote[1].toString()).slice(0, 6));
+      try {
+        const quote = await router.instance.getAmountsOut(ethers.utils.parseEther("1"), [baseCrypto, quoteCrypto]);
+        setFlashQuote(ethers.utils.formatUnits(quote[1].toString()).slice(0, 6));
+      } catch {
+        return;
+      }
     };
     fetchFlashQuote();
   }, [router.instance, baseCrypto, quoteCrypto]);
@@ -81,6 +85,7 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB, v2PairAddr }) => {
       }
       if (baseCrypto === tokenA) {
         //_reserves0 refers to tokenA of the getReserves object, likewise _reserves1 refers to tokenB
+
         setTokenAreserves(parseInt(ethers.utils.formatEther((await v2PairInstance.getReserves())._reserve0)));
         setTokenBreserves(parseInt(ethers.utils.formatEther((await v2PairInstance.getReserves())._reserve1)));
       } else if (baseCrypto === tokenB) {
