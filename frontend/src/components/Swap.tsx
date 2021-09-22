@@ -85,7 +85,6 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB, v2PairAddr }) => {
       }
       if (baseCrypto === tokenA) {
         //_reserves0 refers to tokenA of the getReserves object, likewise _reserves1 refers to tokenB
-
         setTokenAreserves(parseInt(ethers.utils.formatEther((await v2PairInstance.getReserves())._reserve0)));
         setTokenBreserves(parseInt(ethers.utils.formatEther((await v2PairInstance.getReserves())._reserve1)));
       } else if (baseCrypto === tokenB) {
