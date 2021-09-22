@@ -42,6 +42,12 @@ const STATIC_addressBook = [
     uniPairAdd: "0xf59aBd1e4b6E2729Fa2148323CF3921634dBfaf1",
   },
   {
+    id: "6",
+    tokenAadd: "0x99c98ADab1Fd2A77f5C394153A20c9Db6D9d393a",
+    tokenBadd: "0xbA04725116854CF83e7C841DCFF7e9E32CE48A78",
+    uniPairAdd: "0x16C95d35CA1B948a19a3771a125bf2e4a0977959",
+  },
+  {
     id: "7",
     tokenAadd: "0x6362b341F620ccbD8Af7B097c7DB7B5b5Fae001e",
     tokenBadd: "0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735",
