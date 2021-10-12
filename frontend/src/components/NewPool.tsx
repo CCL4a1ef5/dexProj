@@ -41,10 +41,10 @@ export const NewPool = (props: {
   };
 
   const amtAChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmtTokenA(parseInt(event.target.value));
+    setAmtTokenA(parseFloat(event.target.value));
   };
   const amtBChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmtTokenB(parseInt(event.target.value));
+    setAmtTokenB(parseFloat(event.target.value));
   };
 
   function setBothTokenInstances() {
@@ -86,6 +86,8 @@ export const NewPool = (props: {
       console.log("router instance not found");
       return;
     }
+    // if (amtTokenA === undefined || amtTokenB === undefined) {setAmtTokenA(0); setAmtTokenB(0)}
+
     await tokenAInstance.approve(router.instance.address, ethers.utils.parseEther(amtTokenA.toString()));
     await tokenBInstance.approve(router.instance.address, ethers.utils.parseEther(amtTokenB.toString()));
   };
@@ -112,6 +114,8 @@ export const NewPool = (props: {
       currentAddress,
       futureTime
     );
+    setAmtTokenA(0);
+    setAmtTokenA(0);
   };
 
   const createPair = async () => {
@@ -157,17 +161,38 @@ export const NewPool = (props: {
         <div className="w-full">
           <div className="p-1">
             <label className="p-2">tokenA address :</label>
-            <input className="w-96 rounded-lg" type="text" onChange={addressAChangeHandler} />
+            <input className="w-96 rounded-lg" type="text" value={tokenAaddress} onChange={addressAChangeHandler} />
             <label className="p-2">tokenA amount :</label>
-            <input className="w-28 rounded" type="number" min="0.01" step="0.01" onChange={amtAChangeHandler} />
+            <input
+              className="w-28 rounded"
+              type="number"
+              min="0"
+              step="0.1"
+              value={amtTokenA}
+              onChange={amtAChangeHandler}
+            />
             <label className="p-2">tokenA symbol :</label>
             <input className="w-28 rounded" disabled type="text" value={tokenASymbol} />
           </div>
           <div className="p-3">
             <label className="p-2">tokenB address :</label>
-            <input className="w-96 rounded-lg" type="text" onChange={addressBChangeHandler} />
+            <input
+              className="w-96 rounded-lg"
+              type="text"
+              min="0"
+              step="0.1"
+              value={tokenBaddress}
+              onChange={addressBChangeHandler}
+            />
             <label className="p-2">tokenB amount :</label>
-            <input className="w-28 rounded" type="number" min="0.01" step="0.01" onChange={amtBChangeHandler} />
+            <input
+              className="w-28 rounded"
+              type="number"
+              min="0"
+              step="0.1"
+              value={amtTokenB}
+              onChange={amtBChangeHandler}
+            />
             <label className="p-2">tokenB symbol :</label>
             <input className="w-28 rounded" disabled type="text" value={tokenBSymbol} />
           </div>

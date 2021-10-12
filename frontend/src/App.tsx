@@ -64,9 +64,7 @@ function App() {
     tokenBadd: string;
     uniPairAdd: string;
   }) => {
-    console.log(enteredV2PairAddr);
     setAddressBook(addressBook.concat(enteredV2PairAddr));
-    console.log(addressBook);
   };
 
   return (
